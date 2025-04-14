@@ -97,14 +97,14 @@ function Navbar() {
               </Link>
             </li>
           </ul>
-          <div className="navbar__buttons">
+          {/* <div className="navbar__buttons">
             <Link className="navbar__buttons__sign-in" to="/">
               Sign In
             </Link>
             <Link className="navbar__buttons__register" to="/">
               Register
             </Link>
-          </div>
+          </div> */}
 
           {/* mobile */}
           <div className="mobile-hamb" onClick={openNav}>

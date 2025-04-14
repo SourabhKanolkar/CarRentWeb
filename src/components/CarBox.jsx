@@ -2,6 +2,14 @@ import { useState } from "react";
 
 function CarBox({ data, carID }) {
   const [carLoad, setCarLoad] = useState(true);
+
+
+
+
+
+
+
+
   return (
     <>
       {data[carID].map((car, id) => (
@@ -19,7 +27,7 @@ function CarBox({ data, carID }) {
           {/* description */}
           <div className="pick-description">
             <div className="pick-description__price">
-              <span>${car.price}</span>/ rent per day
+              <span>RS {car.price}</span>/ rent per day
             </div>
             <div className="pick-description__table">
               <div className="pick-description__table__col">
@@ -55,6 +63,10 @@ function CarBox({ data, carID }) {
               <div className="pick-description__table__col">
                 <span>Fuel</span>
                 <span>{car.fuel}</span>
+              </div>
+              <div className="pick-description__table__col">
+                <span>PUC</span>
+                <span>{car.PUC}</span>
               </div>
             </div>
             {/* btn cta */}

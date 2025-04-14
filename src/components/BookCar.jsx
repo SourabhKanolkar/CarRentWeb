@@ -8,11 +8,11 @@ import CarPassat from "../images/cars-big/passatcc.jpg";
 import { IconCar, IconInfoCircleFilled, IconX } from "@tabler/icons-react";
 import { IconMapPinFilled } from "@tabler/icons-react";
 import { IconCalendarEvent } from "@tabler/icons-react";
+import { db } from "../firebase-config";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 function BookCar() {
-  const [modal, setModal] = useState(false); //  class - active-modal
-
-  // booking car
+  const [modal, setModal] = useState(false);
   const [carType, setCarType] = useState("");
   const [pickUp, setPickUp] = useState("");
   const [dropOff, setDropOff] = useState("");
@@ -20,7 +20,6 @@ function BookCar() {
   const [dropTime, setDropTime] = useState("");
   const [carImg, setCarImg] = useState("");
 
-  // modal infos
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -30,40 +29,48 @@ function BookCar() {
   const [city, setCity] = useState("");
   const [zipcode, setZipCode] = useState("");
 
-  // taking value of modal inputs
-  const handleName = (e) => {
-    setName(e.target.value);
+  const amount = 1000; // ₹1000 hardcoded
+
+  const [paymentMethod, setPaymentMethod] = useState("Online");
+
+
+  //razorpay intregation function
+  const handleCreateOrder = (e) => {
+    e.preventDefault();
+  
+    if (paymentMethod === "COD") {
+      confirmBooking(); // No Razorpay
+      return;
+    }
+  
+    const options = {
+      key: "rzp_live_PuECn9YXAKoa7f",
+      amount: amount * 100,
+      currency: "INR",
+      name: "OS DIA DE FESTA",
+      description: "Car booking transaction",
+      image: "",
+      handler: function (response) {
+        console.log("Payment successful:", response);
+        confirmBooking();
+      },
+      prefill: {
+        name: name,
+        email: email,
+        contact: phone,
+      },
+      notes: {
+        address: address,
+      },
+      theme: {
+        color: "#61dafb",
+      },
+    };
+  
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
-  const handleLastName = (e) => {
-    setLastName(e.target.value);
-  };
-
-  const handlePhone = (e) => {
-    setPhone(e.target.value);
-  };
-
-  const handleAge = (e) => {
-    setAge(e.target.value);
-  };
-
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleAddress = (e) => {
-    setAddress(e.target.value);
-  };
-
-  const handleCity = (e) => {
-    setCity(e.target.value);
-  };
-
-  const handleZip = (e) => {
-    setZipCode(e.target.value);
-  };
-
-  // open modal when all inputs are fulfilled
   const openModal = (e) => {
     e.preventDefault();
     const errorMsg = document.querySelector(".error-message");
@@ -76,53 +83,69 @@ function BookCar() {
     ) {
       errorMsg.style.display = "flex";
     } else {
-      setModal(!modal);
+      setModal(true);
       const modalDiv = document.querySelector(".booking-modal");
       modalDiv.scroll(0, 0);
       errorMsg.style.display = "none";
     }
   };
 
-  // disable page scroll when modal is displayed
   useEffect(() => {
-    if (modal === true) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = modal ? "hidden" : "auto";
   }, [modal]);
 
-  // confirm modal booking
-  const confirmBooking = (e) => {
-    e.preventDefault();
-    setModal(!modal);
-    const doneMsg = document.querySelector(".booking-done");
-    doneMsg.style.display = "flex";
+  const confirmBooking = async () => {
+    const bookingData = {
+      carType,
+      pickUp,
+      dropOff,
+      pickTime,
+      dropTime,
+      amount,
+      paymentMethod, // add this
+      customer: {
+        firstName: name,
+        lastName,
+        phone,
+        age,
+        email,
+        address,
+        city,
+        zipcode,
+      },
+      bookedAt: Timestamp.now(),
+    };
+  
+    try {
+      await addDoc(collection(db, "bookings"), bookingData);
+      setModal(false);
+      const doneMsg = document.querySelector(".booking-done");
+      doneMsg.style.display = "flex";
+    } catch (error) {
+      console.error("Error booking car:", error);
+      alert("Something went wrong while booking. Please try again.");
+    }
   };
+  
 
-  // taking value of booking inputs
   const handleCar = (e) => {
     setCarType(e.target.value);
     setCarImg(e.target.value);
   };
 
-  const handlePick = (e) => {
-    setPickUp(e.target.value);
-  };
+  const handlePick = (e) => setPickUp(e.target.value);
+  const handleDrop = (e) => setDropOff(e.target.value);
+  const handlePickTime = (e) => setPickTime(e.target.value);
+  const handleDropTime = (e) => setDropTime(e.target.value);
+  const handleName = (e) => setName(e.target.value);
+  const handleLastName = (e) => setLastName(e.target.value);
+  const handlePhone = (e) => setPhone(e.target.value);
+  const handleAge = (e) => setAge(e.target.value);
+  const handleEmail = (e) => setEmail(e.target.value);
+  const handleAddress = (e) => setAddress(e.target.value);
+  const handleCity = (e) => setCity(e.target.value);
+  const handleZip = (e) => setZipCode(e.target.value);
 
-  const handleDrop = (e) => {
-    setDropOff(e.target.value);
-  };
-
-  const handlePickTime = (e) => {
-    setPickTime(e.target.value);
-  };
-
-  const handleDropTime = (e) => {
-    setDropTime(e.target.value);
-  };
-
-  // based on value name show car img
   let imgUrl;
   switch (carImg) {
     case "Audi A1 S-Line":
@@ -147,7 +170,6 @@ function BookCar() {
       imgUrl = "";
   }
 
-  // hide message
   const hideMessage = () => {
     const doneMsg = document.querySelector(".booking-done");
     doneMsg.style.display = "none";
@@ -156,7 +178,6 @@ function BookCar() {
   return (
     <>
       <section id="booking-section" className="book-section">
-        {/* overlay */}
         <div
           onClick={openModal}
           className={`modal-overlay ${modal ? "active-modal" : ""}`}
@@ -166,11 +187,9 @@ function BookCar() {
           <div className="book-content">
             <div className="book-content__box">
               <h2>Book a car</h2>
-
               <p className="error-message">
                 All fields required! <IconX width={20} height={20} />
               </p>
-
               <p className="booking-done">
                 Check your email to confirm an order.{" "}
                 <IconX width={20} height={20} onClick={hideMessage} />
@@ -187,9 +206,7 @@ function BookCar() {
                     <option value="Audi A1 S-Line">Audi A1 S-Line</option>
                     <option value="VW Golf 6">VW Golf 6</option>
                     <option value="Toyota Camry">Toyota Camry</option>
-                    <option value="BMW 320 ModernLine">
-                      BMW 320 ModernLine
-                    </option>
+                    <option value="BMW 320 ModernLine">BMW 320 ModernLine</option>
                     <option value="Mercedes-Benz GLK">Mercedes-Benz GLK</option>
                     <option value="VW Passat CC">VW Passat CC</option>
                   </select>
@@ -235,7 +252,7 @@ function BookCar() {
                     value={pickTime}
                     onChange={handlePickTime}
                     type="date"
-                  ></input>
+                  />
                 </div>
 
                 <div className="box-form__car-time">
@@ -248,7 +265,7 @@ function BookCar() {
                     value={dropTime}
                     onChange={handleDropTime}
                     type="date"
-                  ></input>
+                  />
                 </div>
 
                 <button onClick={openModal} type="submit">
@@ -260,15 +277,13 @@ function BookCar() {
         </div>
       </section>
 
-      {/* modal ------------------------------------ */}
-
+      {/* Modal */}
       <div className={`booking-modal ${modal ? "active-modal" : ""}`}>
-        {/* title */}
         <div className="booking-modal__title">
           <h2>Complete Reservation</h2>
-          <IconX onClick={openModal} />
+          <IconX onClick={() => setModal(false)} />
         </div>
-        {/* message */}
+
         <div className="booking-modal__message">
           <h4>
             <IconInfoCircleFilled /> Upon completing this reservation enquiry,
@@ -279,7 +294,7 @@ function BookCar() {
             toll-free customer support number.
           </p>
         </div>
-        {/* car info */}
+
         <div className="booking-modal__car-info">
           <div className="dates-div">
             <div className="booking-modal__car-info__dates">
@@ -289,8 +304,7 @@ function BookCar() {
                 <div>
                   <h6>Pick-Up Date & Time</h6>
                   <p>
-                    {pickTime} /{" "}
-                    <input type="time" className="input-time"></input>
+                    {pickTime} / <input type="time" className="input-time" />
                   </p>
                 </div>
               </span>
@@ -302,8 +316,7 @@ function BookCar() {
                 <div>
                   <h6>Drop-Off Date & Time</h6>
                   <p>
-                    {dropTime} /{" "}
-                    <input type="time" className="input-time"></input>
+                    {dropTime} / <input type="time" className="input-time" />
                   </p>
                 </div>
               </span>
@@ -329,134 +342,74 @@ function BookCar() {
               </span>
             </div>
           </div>
+
           <div className="booking-modal__car-info__model">
             <h5>
               <span>Car -</span> {carType}
             </h5>
+            <p style={{ fontWeight: "bold", marginTop: "10px" }}>
+              ₹{amount} / day
+            </p>
             {imgUrl && <img src={imgUrl} alt="car_img" />}
           </div>
         </div>
-        {/* personal info */}
+
         <div className="booking-modal__person-info">
           <h4>Personal Information</h4>
           <form className="info-form">
             <div className="info-form__2col">
               <span>
-                <label>
-                  First Name <b>*</b>
-                </label>
-                <input
-                  value={name}
-                  onChange={handleName}
-                  type="text"
-                  placeholder="Enter your first name"
-                ></input>
-                <p className="error-modal">This field is required.</p>
+                <label>First Name *</label>
+                <input value={name} onChange={handleName} type="text" />
               </span>
-
               <span>
-                <label>
-                  Last Name <b>*</b>
-                </label>
-                <input
-                  value={lastName}
-                  onChange={handleLastName}
-                  type="text"
-                  placeholder="Enter your last name"
-                ></input>
-                <p className="error-modal ">This field is required.</p>
+                <label>Last Name *</label>
+                <input value={lastName} onChange={handleLastName} type="text" />
               </span>
-
               <span>
-                <label>
-                  Phone Number <b>*</b>
-                </label>
-                <input
-                  value={phone}
-                  onChange={handlePhone}
-                  type="tel"
-                  placeholder="Enter your phone number"
-                ></input>
-                <p className="error-modal">This field is required.</p>
+                <label>Phone *</label>
+                <input value={phone} onChange={handlePhone} type="tel" />
               </span>
-
               <span>
-                <label>
-                  Age <b>*</b>
-                </label>
-                <input
-                  value={age}
-                  onChange={handleAge}
-                  type="number"
-                  placeholder="18"
-                ></input>
-                <p className="error-modal ">This field is required.</p>
+                <label>Age *</label>
+                <input value={age} onChange={handleAge} type="number" />
               </span>
             </div>
 
             <div className="info-form__1col">
               <span>
-                <label>
-                  Email <b>*</b>
-                </label>
-                <input
-                  value={email}
-                  onChange={handleEmail}
-                  type="email"
-                  placeholder="Enter your email address"
-                ></input>
-                <p className="error-modal">This field is required.</p>
+                <label>Email *</label>
+                <input value={email} onChange={handleEmail} type="email" />
               </span>
-
               <span>
-                <label>
-                  Address <b>*</b>
-                </label>
-                <input
-                  value={address}
-                  onChange={handleAddress}
-                  type="text"
-                  placeholder="Enter your street address"
-                ></input>
-                <p className="error-modal ">This field is required.</p>
+                <label>Address *</label>
+                <input value={address} onChange={handleAddress} type="text" />
               </span>
             </div>
 
             <div className="info-form__2col">
               <span>
-                <label>
-                  City <b>*</b>
-                </label>
-                <input
-                  value={city}
-                  onChange={handleCity}
-                  type="text"
-                  placeholder="Enter your city"
-                ></input>
-                <p className="error-modal">This field is required.</p>
+                <label>City *</label>
+                <input value={city} onChange={handleCity} type="text" />
               </span>
-
               <span>
-                <label>
-                  Zip Code <b>*</b>
-                </label>
-                <input
-                  value={zipcode}
-                  onChange={handleZip}
-                  type="text"
-                  placeholder="Enter your zip code"
-                ></input>
-                <p className="error-modal ">This field is required.</p>
+                <label>Zip Code *</label>
+                <input value={zipcode} onChange={handleZip} type="text" />
               </span>
             </div>
 
-            <span className="info-form__checkbox">
-              <input type="checkbox"></input>
-              <p>Please send me latest news and updates</p>
-            </span>
+            <div className="info-form__1col">
+  <span>
+    <label>Payment Method *</label>
+    <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+      <option value="Online">Online Payment</option>
+      <option value="COD">Cash on Delivery (COD)</option>
+    </select>
+  </span>
+</div>
 
             <div className="reserve-button">
-              <button onClick={confirmBooking}>Reserve Now</button>
+              <button onClick={handleCreateOrder}>Reserve Now</button>
             </div>
           </form>
         </div>

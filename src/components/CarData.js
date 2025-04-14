@@ -18,6 +18,7 @@ export const CAR_DATA = [
       air: "Yes",
       transmission: "Manual",
       fuel: "Diesel",
+      PUC: "valid till 20/09/2027",
     },
   ],
   [
@@ -32,6 +33,7 @@ export const CAR_DATA = [
       air: "Yes",
       transmission: "Manual",
       fuel: "Gasoline",
+      PUC: "valid till 20/09/2026",
     },
   ],
   [
@@ -46,6 +48,7 @@ export const CAR_DATA = [
       air: "Yes",
       transmission: "Automatic",
       fuel: "Hybrid",
+      PUC: "valid till 20/09/2025",
     },
   ],
   [
@@ -60,6 +63,7 @@ export const CAR_DATA = [
       air: "Yes",
       transmission: "Manual",
       fuel: "Diesel",
+      PUC: "valid till 10/09/2025",
     },
   ],
   [
@@ -74,6 +78,7 @@ export const CAR_DATA = [
       air: "Yes",
       transmission: "Manual",
       fuel: "Diesel",
+      PUC: "valid till 20/09/2026",
     },
   ],
   [
@@ -88,6 +93,7 @@ export const CAR_DATA = [
       air: "Yes",
       transmission: "Automatic",
       fuel: "Gasoline",
+      PUC: "valid till 20/09/2029",
     },
   ],
 ];

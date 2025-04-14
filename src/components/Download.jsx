@@ -4,7 +4,7 @@ import Img2 from "../images/download/googleapp.svg";
 function Download() {
   return (
     <>
-      <section className="download-section">
+      {/* <section className="download-section">
         <div className="container">
           <div className="download-text">
             <h2>Download our app to get most out of it</h2>
@@ -19,7 +19,7 @@ function Download() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

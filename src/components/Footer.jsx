@@ -16,7 +16,7 @@ function Footer() {
               </li>
               <li>
                 <a href="tel:123456789">
-                  <IconPhoneCall /> &nbsp; (123) -456-789
+                  <IconPhoneCall /> &nbsp;91585 60561
                 </a>
               </li>
 
@@ -26,20 +26,20 @@ function Footer() {
                 carrental@gmail.com"
                 >
                   <IconMail />
-                  &nbsp; carrental@gmail.com
+                  &nbsp; samiksha@gmail.com
                 </a>
               </li>
 
-              <li>
+              {/* <li>
                 <a
                   style={{ fontSize: "14px" }}
                   target="_blank"
                   rel="noreferrer"
                   href="https://github.com/stazrouti/"
                 >
-                  Design by Scolofix
+                  Design by Saurabh5_X_51
                 </a>
-              </li>
+              </li> */}
             </ul>
 
             <ul className="footer-content__2">
