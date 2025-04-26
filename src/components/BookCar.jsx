@@ -10,6 +10,8 @@ import { IconMapPinFilled } from "@tabler/icons-react";
 import { IconCalendarEvent } from "@tabler/icons-react";
 import { db } from "../firebase-config";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import emailjs from "@emailjs/browser";
+
 
 function BookCar() {
   const [modal, setModal] = useState(false);
@@ -19,6 +21,8 @@ function BookCar() {
   const [pickTime, setPickTime] = useState("");
   const [dropTime, setDropTime] = useState("");
   const [carImg, setCarImg] = useState("");
+  const [AdharSubmited,setAdharSubmited]=useState("");
+  const [LicenceSubmited,setLicenceSubmited]=useState("");
 
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -112,12 +116,39 @@ function BookCar() {
         address,
         city,
         zipcode,
+        AdharSubmited,
+        LicenceSubmited
       },
       bookedAt: Timestamp.now(),
     };
   
     try {
       await addDoc(collection(db, "bookings"), bookingData);
+      
+      const emailParams = {
+        user_name: name,
+        email: email,
+        car_type: carType,
+        pickup_location: pickUp,
+        pickup_date: pickTime,
+     
+        dropoff_location: dropOff,
+        dropoff_date: dropTime,
+     
+        amount: amount,
+      };
+      alert(email)
+      await emailjs.send(
+        "service_i05uqfo", 
+        "template_50tz70j", 
+        emailParams,
+        "G2T5AxW2ccVOY7bIt"   
+      );
+      console.log("Email sent successfully ✅");
+
+      alert("chek email")
+     
+
       setModal(false);
       const doneMsg = document.querySelector(".booking-done");
       doneMsg.style.display = "flex";
@@ -397,6 +428,24 @@ function BookCar() {
                 <input value={zipcode} onChange={handleZip} type="text" />
               </span>
             </div>
+           
+           <div className="info-form__2col">
+           <label>AdharCard: *</label>
+            <select value={AdharSubmited} onChange={(e)=>setAdharSubmited(e.target.value)} >
+              <option value="Submited">Submited</option>
+              <option value="NotSubmited">NotSubmited</option>
+            </select>
+           </div>
+             
+           <div className="info-form__2col">
+           <label>Licence: *</label>
+            <select value={LicenceSubmited} onChange={(e)=>setLicenceSubmited(e.target.value)} >
+              <option value="Submited">Submited</option>
+              <option value="NotSubmited">NotSubmited</option>
+            </select>
+           </div>
+
+
 
             <div className="info-form__1col">
   <span>

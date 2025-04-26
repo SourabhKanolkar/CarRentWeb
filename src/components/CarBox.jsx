@@ -3,13 +3,6 @@ import { useState } from "react";
 function CarBox({ data, carID }) {
   const [carLoad, setCarLoad] = useState(true);
 
-
-
-
-
-
-
-
   return (
     <>
       {data[carID].map((car, id) => (
