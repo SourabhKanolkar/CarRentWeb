@@ -5,12 +5,15 @@ import CarToyota from "../images/cars-big/toyotacamry.jpg";
 import CarBmw from "../images/cars-big/bmw320.jpg";
 import CarMercedes from "../images/cars-big/benz.jpg";
 import CarPassat from "../images/cars-big/passatcc.jpg";
+import dio from "../images/bikes-big/dio-1.jpg";
 import { IconCar, IconInfoCircleFilled, IconX } from "@tabler/icons-react";
 import { IconMapPinFilled } from "@tabler/icons-react";
 import { IconCalendarEvent } from "@tabler/icons-react";
 import { db } from "../firebase-config";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import emailjs from "@emailjs/browser";
+// import DatePicker from 'react-datepicker';
+// import { parseISO } from 'date-fns';
 
 
 function BookCar() {
@@ -197,6 +200,9 @@ function BookCar() {
     case "VW Passat CC":
       imgUrl = CarPassat;
       break;
+    case "Honda Dio":
+      imgUrl= dio;
+      break;
     default:
       imgUrl = "";
   }
@@ -240,6 +246,8 @@ function BookCar() {
                     <option value="BMW 320 ModernLine">BMW 320 ModernLine</option>
                     <option value="Mercedes-Benz GLK">Mercedes-Benz GLK</option>
                     <option value="VW Passat CC">VW Passat CC</option>
+                    <option value="Honda Dio">Honda Dio</option>
+                    
                   </select>
                 </div>
 
