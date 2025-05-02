@@ -11,15 +11,17 @@ import Register from "./Pages/Register";
 import BikePage from "./Pages/BikePage";
 import Login from "./Pages/Login";
 
+
 import { useLocation } from "react-router-dom";
 
 function App() {
   const location = useLocation();
+  const hideNavbarRoutes = ["/", "/register"];
   return (
     <>
 
       {/* <Navbar /> */}
-      {location.pathname !== "/" && <Navbar />}
+      {!hideNavbarRoutes.includes(location.pathname.toLowerCase()) && <Navbar />}
       <Routes>
       <Route  path="/" element={<Login />} />
       <Route path="Register" element={<Register />}></Route>
