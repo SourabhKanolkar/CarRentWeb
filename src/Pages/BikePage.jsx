@@ -59,7 +59,7 @@ export default function BikePage() {
                     </span>
                   </div>
                   <div className="models-div__box__descr__name-price__btn">
-                    <Link onClick={() => window.scrollTo(0, 0)} to="/">
+                    <Link onClick={() => window.scrollTo(0, 0)} to="/home">
                       Book Ride
                     </Link>
                   </div>
@@ -109,7 +109,7 @@ export default function BikePage() {
                     </span>
                   </div>
                   <div className="models-div__box__descr__name-price__btn">
-                    <Link onClick={() => window.scrollTo(0, 0)} to="/">
+                    <Link onClick={() => window.scrollTo(0, 0)} to="/home">
                       Book Ride
                     </Link>
                   </div>

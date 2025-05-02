@@ -50,11 +50,11 @@ function Hero() {
                 <Link
                   onClick={bookBtn}
                   className="hero-content__text__btns__book-ride"
-                  to="/"
+                  to="/home"
                 >
                   Book Ride &nbsp; <IconCircleCheck />
                 </Link>
-                <Link className="hero-content__text__btns__learn-more" to="/">
+                <Link className="hero-content__text__btns__learn-more" to="/home">
                   Learn More &nbsp; <IconChevronRight />
                 </Link>
               </div>
