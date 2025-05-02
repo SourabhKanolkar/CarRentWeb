@@ -10,6 +10,7 @@ import Contact from "./Pages/Contact";
 import Register from "./Pages/Register";
 import BikePage from "./Pages/BikePage";
 import Login from "./Pages/Login";
+
 import { useLocation } from "react-router-dom";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       {location.pathname !== "/" && <Navbar />}
       <Routes>
       <Route  path="/" element={<Login />} />
+      <Route path="Register" element={<Register />}></Route>
         <Route path="home" element={<Home />}/>
         <Route path="about" element={<About />} />
         <Route path="models" element={<Models />} />

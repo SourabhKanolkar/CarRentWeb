@@ -41,7 +41,7 @@ export default function Login() {
   </div>
  
   <button type="submit" className="btn btn-primary">Login</button>
-  <Link to={"/home"}>SignUp</Link>
+  <Link to={"/Register"}>SignUp</Link>
 </form>
             </div>
         </div>
