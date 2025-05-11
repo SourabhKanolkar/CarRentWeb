@@ -26,6 +26,7 @@ import emailjs from "@emailjs/browser";
 import DatePicker from "react-datepicker";
 import { parseISO, isWithinInterval } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
+import './Date.css'
 
 function BookCar() {
   const [modal, setModal] = useState(false);
@@ -53,6 +54,19 @@ function BookCar() {
 
   const handleCreateOrder = (e) => {
     e.preventDefault();
+
+    if (!validatePhone(phone)) {
+      alert("Please enter a valid phone number.");
+      return;
+    }
+    if (!validateAge(age)) {
+      alert("Please Enter A Valid Age");
+      return;
+    }
+    if (!validateZipCode(zipcode)) {
+      alert("Zip code must be exactly 6 digits.");
+      return;
+    }
 
     if (paymentMethod === "COD") {
       confirmBooking();
@@ -197,6 +211,19 @@ function BookCar() {
     "VW Passat CC": CarPassat,
     "Honda Dio": dio,
   };
+  //validate number
+   const validatePhone = (phone) => {
+    return phone.length === 10;
+  };
+   //validate age
+   const validateAge = (age) => {
+    return age <= 99;
+  };
+  //validate ZipCode
+   const validateZipCode = (zipCode) => {
+    return zipCode.length === 6;
+  };
+
 
   return (
     <>
@@ -248,13 +275,15 @@ function BookCar() {
                 </div>
 
                 <div className="box-form__car-time">
-                  <label><IconCalendarEvent /> Pick-up Date *</label>
-                  <DatePicker
+                  <label><IconCalendarEvent /> Pick-up Date*</label>
+                  <DatePicker 
                     selected={pickDate}
                     onChange={(date) => setPickDate(date)}
                     minDate={new Date()}
                     filterDate={(date) => !isDateBooked(date)}
                     placeholderText="Select a pick-up date"
+                     className="custom-datepicker"
+                     
                   />
                 </div>
 
@@ -266,6 +295,7 @@ function BookCar() {
                     minDate={pickDate || new Date()}
                     filterDate={(date) => !isDateBooked(date)}
                     placeholderText="Select a drop-off date"
+                    className="custom-datepicker"
                   />
                 </div>
 

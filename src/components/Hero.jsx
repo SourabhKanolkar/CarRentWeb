@@ -54,8 +54,8 @@ function Hero() {
                 >
                   Book Ride &nbsp; <IconCircleCheck />
                 </Link>
-                <Link className="hero-content__text__btns__learn-more" to="/home">
-                  Learn More &nbsp; <IconChevronRight />
+                <Link className="hero-content__text__btns__learn-more" to="https://wa.me/9158560561?text=Hello,%20I'm%20interested%20in%20learning%20more!">
+                  Whats App &nbsp; <IconChevronRight />
                 </Link>
               </div>
             </div>

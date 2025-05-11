@@ -1,10 +1,9 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { db,auth } from '../firebase-config';
-import { setDoc,doc } from 'firebase/firestore';
+import { db, auth } from '../firebase-config';
+import { setDoc, doc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import './Register.css';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -16,6 +15,7 @@ export default function Register() {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
@@ -24,15 +24,12 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { name, email, password } = formData;
 
     try {
-      // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save additional user data in Firestore
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         name,
@@ -42,6 +39,7 @@ export default function Register() {
 
       setSuccess('Registration successful!');
       setFormData({ name: '', email: '', password: '' });
+
       setTimeout(() => {
         navigate('/');
       }, 1000);
@@ -51,67 +49,54 @@ export default function Register() {
   };
 
   return (
-    <>
-  
- 
-    <section id="register-page" className="">
-          <div className="container">
-            <div className="row">
-              <h2 className='text-center'>REGISTER</h2>
-              <div className="col-12">
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="name" className="form-label">Full Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+    <section id="register-page">
+      <div className="register-container">
+        <form className="register-form" onSubmit={handleSubmit}>
+          <h2>REGISTER</h2>
 
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Email address</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    minLength={6}
-                  />
-                </div>
-
-                <button type="submit" className="btn btn-primary w-100">Register</button>
-              </form>
-              {error && <div className="alert alert-danger mt-3">{error}</div>}
-              {success && <div className="alert alert-success mt-3">{success}</div>}
-              </div>
-            </div>
+          <div className="form-group">
+            <label htmlFor="name">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
           </div>
-      </section>
-    
 
+          <div className="form-group">
+            <label htmlFor="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-    
-    </>
-  )
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              minLength={6}
+            />
+          </div>
+
+          <button type="submit">Register</button>
+
+          {error && <div className="alert alert-danger">{error}</div>}
+          {success && <div className="alert alert-success">{success}</div>}
+        </form>
+      </div>
+    </section>
+  );
 }

@@ -1,4 +1,5 @@
 import { IconMail, IconPhoneCall } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -43,21 +44,22 @@ function Footer() {
             </ul>
 
             <ul className="footer-content__2">
-              <li>Company</li>
+              <li>Car Rental</li>
               <li>
-                <a href="#home">New York</a>
+                {/* <a href="#home">New York</a> */}
+                <Link to='/home'>Home</Link>
               </li>
               <li>
-                <a href="#home">Careers</a>
+                <Link to='/about'>About</Link>
               </li>
               <li>
-                <a href="#home">Mobile</a>
+               <Link to='/team'>Team</Link>
               </li>
               <li>
-                <a href="#home">Blog</a>
+              <Link to='/contact'>Contact</Link>
               </li>
               <li>
-                <a href="#home">How we work</a>
+              <Link to='/models'>Models</Link>
               </li>
             </ul>
 
@@ -68,7 +70,7 @@ function Footer() {
               <li>Sun: Closed</li>
             </ul>
 
-            <ul className="footer-content__2">
+            {/* <ul className="footer-content__2">
               <li>Subscription</li>
               <li>
                 <p>Subscribe your Email address for latest news & updates.</p>
@@ -79,7 +81,7 @@ function Footer() {
               <li>
                 <button className="submit-email">Submit</button>
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </footer>
